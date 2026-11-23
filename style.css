@@ -1,0 +1,384 @@
+/* ============================================================
+   Die Platzmacher – gemeinsames Stylesheet für alle Seiten
+
+   Aufbau dieser Datei:
+   1. Farben und Grundwerte (Variablen)
+   2. Grundlagen (Reset, Typografie)
+   3. Bausteine (Buttons, Karten, Formular)
+   4. Die einzelnen Abschnitte der Seite
+   5. Anpassung für Handy und Tablet
+   ============================================================ */
+
+
+/* ---------- 1. Farben und Grundwerte -------------------------
+   Als CSS-Variablen definiert. Wenn du die Farbe der Seite
+   ändern willst, änderst du sie hier einmal – und überall,
+   wo var(--accent) steht, ändert sie sich mit.
+   ------------------------------------------------------------ */
+:root {
+  --ink:        #14203a;   /* Dunkelblau, Haupttext und dunkle Flächen */
+  --ink-soft:   #47526b;   /* Grauer Fließtext */
+  --accent:     #d4761a;   /* Warmes Orange, für Knöpfe und Akzente */
+  --accent-dk:  #b0600f;   /* Dieselbe Farbe dunkler, für Hover */
+  --bg:         #ffffff;
+  --bg-alt:     #f4f6f9;   /* Sehr helles Grau für abgesetzte Abschnitte */
+  /* Rahmenfarbe halbtransparent statt festem Hex-Wert: Das Dunkelblau mit
+     13 % Deckkraft sieht auf Weiß aus wie vorher (#dfe4ec), passt sich aber
+     automatisch an, wenn der Rahmen auf Grau, dem Verlauf im Hero oder dem
+     durchscheinenden Kopfbereich liegt. */
+  --line:       rgb(20 32 58 / 0.13);
+  --radius:     10px;
+  --wrap:       1120px;    /* Maximale Inhaltsbreite */
+  --shadow:     0 1px 2px rgba(20,32,58,.06), 0 8px 24px rgba(20,32,58,.07);
+}
+
+
+/* ---------- 2. Grundlagen ------------------------------------ */
+
+/* border-box sorgt dafür, dass Innenabstand und Rahmen in der
+   angegebenen Breite enthalten sind. Erspart viel Rechnerei. */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  color: var(--ink);
+  line-height: 1.2;
+  margin: 0 0 .5em;
+  letter-spacing: -.01em;
+  /* Deutsche Komposita wie "Wohnungsentrümpelung" sind lang und würden
+     sonst aus schmalen Karten herauslaufen. Zusammen mit lang="de" im
+     <html>-Tag trennt der Browser sie an sinnvollen Stellen. */
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3.1rem); }   /* clamp: wächst mit der Fensterbreite, aber nur zwischen min und max */
+h2 { font-size: clamp(1.6rem, 3.5vw, 2.2rem); }
+h3 { font-size: 1.15rem; }
+
+p { margin: 0 0 1em; }
+
+a { color: var(--accent-dk); }
+
+img { max-width: 100%; height: auto; display: block; }
+
+/* Der zentrale Container: begrenzt die Breite und zentriert sie */
+.wrap {
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.lead { font-size: 1.1rem; }
+.small { font-size: .875rem; opacity: .8; }
+
+/* Tastatur-Bedienbarkeit: sichtbarer Fokusrahmen */
+a:focus-visible, button:focus-visible, input:focus-visible,
+select:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+
+/* ---------- 3. Bausteine ------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5em;
+  padding: .8em 1.5em;
+  border: 0;
+  border-radius: var(--radius);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color .15s, transform .05s;
+}
+.btn:active { transform: translateY(1px); }
+
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-dk); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+.btn-ghost:hover { background: var(--bg-alt); }
+
+.btn-phone {
+  background: var(--bg-alt);
+  color: var(--ink);
+  font-weight: 700;
+  padding: .55em 1em;
+}
+.btn-phone:hover { background: #e8ecf3; }
+.btn-phone svg { width: 18px; height: 18px; fill: var(--accent); }
+
+.btn-big   { font-size: 1.3rem; padding: .7em 1.4em; }
+.btn-block { width: 100%; }
+
+
+/* ---------- 4. Abschnitte ------------------------------------ */
+
+/* Kopfbereich */
+.site-header {
+  border-bottom: 1px solid var(--line);
+  position: sticky;      /* bleibt beim Scrollen oben kleben */
+  top: 0;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-height: 72px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  color: var(--ink);
+  margin-right: auto;    /* schiebt alles Weitere nach rechts */
+}
+.logo-mark {
+  background: var(--ink);
+  width: 38px; height: 38px;
+  border-radius: 9px;
+  display: grid; place-items: center;
+  flex-shrink: 0;                 /* Badge behält seine Größe, auch wenn der Text lang wird */
+}
+.logo-mark svg { width: 100%; height: 100%; }
+.logo-mark text { font-family: inherit; }   /* Monogramm in derselben Schrift wie die Seite */
+.logo-text { font-size: 1.1rem; }
+
+.nav { display: flex; gap: 22px; }
+.nav a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-weight: 500;
+}
+.nav a:hover { color: var(--accent-dk); }
+
+/* Hero */
+.hero {
+  background: linear-gradient(180deg, var(--bg-alt), var(--bg));
+  padding: 72px 0 64px;
+}
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--accent-dk);
+  margin-bottom: .8em;
+}
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+.trust-card {
+  list-style: none;
+  margin: 0; padding: 26px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 18px;
+}
+.trust-card li { font-size: .95rem; }
+.trust-card strong {
+  display: block;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+
+/* Allgemeine Abschnitte */
+.section { padding: 72px 0; }
+.section-alt { background: var(--bg-alt); }
+.section-intro { max-width: 62ch; margin-bottom: 36px; }
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+/* Leistungskarten */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 26px;
+}
+.card p:last-child { margin-bottom: 0; }
+.section-alt .card { background: #fff; }
+
+/* Ablauf-Schritte */
+.steps {
+  list-style: none;
+  counter-reset: step;
+  margin: 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 28px;
+}
+.steps li { position: relative; }
+.step-num {
+  display: grid; place-items: center;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.steps p { margin: 0; font-size: .96rem; }
+
+/* Häkchenliste */
+.check-list { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 14px; }
+.check-list li { padding-left: 30px; position: relative; }
+.check-list li::before {
+  content: "✓";
+  position: absolute; left: 0; top: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+.check-list strong { color: var(--ink); }
+
+/* Einsatzgebiet */
+.area-box {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+.area-list { color: var(--ink); font-weight: 500; }
+
+/* Dunkler Kontaktbereich */
+.section-dark {
+  background: var(--ink);
+  color: #c7cfdf;
+}
+.section-dark h2 { color: #fff; }
+.section-dark a { color: #f0b070; }
+.direct-contact { margin-top: 32px; display: grid; gap: 14px; justify-items: start; }
+.mail-link { font-size: 1.05rem; }
+
+/* Formular */
+.form {
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px;
+  display: grid;
+  gap: 16px;
+  color: var(--ink-soft);
+}
+.form label {
+  display: grid;
+  gap: 6px;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.form input, .form select, .form textarea {
+  font: inherit;
+  font-weight: 400;
+  padding: .65em .8em;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  width: 100%;
+}
+.form textarea { resize: vertical; }
+.checkbox {
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 10px;
+  font-weight: 400;
+  font-size: .85rem;
+  color: var(--ink-soft);
+}
+.checkbox input { width: auto; margin-top: .3em; }
+
+/* Fußzeile */
+.site-footer {
+  background: #0e1729;
+  color: #9aa6bd;
+  padding: 28px 0;
+  font-size: .9rem;
+}
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+}
+.site-footer p { margin: 0; }
+.site-footer strong { color: #fff; }
+.footer-nav { display: flex; gap: 20px; }
+.site-footer a { color: #9aa6bd; text-decoration: none; }
+.site-footer a:hover { color: #fff; text-decoration: underline; }
+
+/* Rechtstexte (Impressum, Datenschutz) */
+.legal { padding: 56px 0 72px; }
+.legal .wrap { max-width: 760px; }
+.legal h2 { font-size: 1.35rem; margin-top: 2em; }
+.legal .placeholder {
+  background: #fff8e6;
+  border-left: 4px solid var(--accent);
+  padding: 14px 18px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 1.5em;
+  font-size: .95rem;
+}
+
+
+/* ---------- 5. Handy und Tablet ------------------------------
+   Alles unterhalb von 860 Pixel Breite bekommt einspaltiges
+   Layout. Das ist der einzige Umbruchpunkt, den diese Seite
+   braucht – bewusst simpel gehalten.
+   ------------------------------------------------------------ */
+@media (max-width: 860px) {
+  .hero-inner,
+  .two-col { grid-template-columns: 1fr; }
+
+  .nav { display: none; }          /* Menü auf dem Handy ausblenden … */
+  .header-inner { min-height: 64px; }
+  .hero { padding: 48px 0; }
+  .section { padding: 56px 0; }
+  .footer-inner { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 420px) {
+  .logo-text { display: none; }    /* … auf sehr schmalen Displays nur das Kürzel */
+  .btn-big { font-size: 1.15rem; }
+}
